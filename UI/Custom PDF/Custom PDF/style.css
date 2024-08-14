@@ -1,0 +1,48 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.viewer-container {
+    width: 50%; /* Take up 50% of the screen width */
+    height: 80vh; /* Adjust the height as needed */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden; /* Ensure content stays within the container */
+}
+
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+    position: absolute; /* Keep the toolbar fixed at the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensure it stays above the PDF content */
+}
+
+.toolbar button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.pdf-viewer {
+    padding: 20px;
+    overflow: auto;
+    position: absolute;
+    top: 25px; /* Leave space for the toolbar */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(100% - 25px); /* Adjust based on toolbar height */
+}

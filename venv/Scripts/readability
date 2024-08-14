@@ -1,0 +1,3 @@
+#!F:\Docker Flask\web_rembrance\venv\scripts\python.exe
+import readability
+readability.main()
