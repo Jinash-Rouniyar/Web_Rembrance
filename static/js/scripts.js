@@ -7,7 +7,8 @@ let isFirstRecording = true;
 let recordingStarted = false;
 
 const recordButton = document.getElementById('recordButton');
-const spinner = document.getElementById('spinner');
+const listeningText = document.getElementById('listening');
+const respondingText = document.getElementById('responding');
 
 const SILENCE_THRESHOLD = 15;
 const SILENCE_DURATION = 2000; // 2 seconds
@@ -32,22 +33,24 @@ recordButton.disabled = true;
 if (isFirstRecording) {
     const defaultAudio = new Audio('/get_default_audio');
     defaultAudio.onplay = () => {
-        spinner.style.display = 'none';  // Hide spinner when default audio starts
+        listeningText.classList.add('hidden');
+        respondingText.classList.add('hidden');
     };
     defaultAudio.onended = () => {
-        spinner.style.display = 'block';  // Show spinner when default audio ends and recording is about to start
+        listeningText.classList.remove('hidden');
+        respondingText.classList.add('hidden');
         startRecording();
     };
     await defaultAudio.play();
     isFirstRecording = false;
 } else {
-    spinner.style.display = 'block';  // Show spinner when starting to record
+    listeningText.classList.remove('hidden');
+    respondingText.classList.add('hidden');
     startRecording();
 }
 };
 
 async function startRecording() {
-spinner.style.display = 'block'
 audioChunks = [];
 recordingStarted = false;
 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -67,7 +70,8 @@ mediaRecorder.onstop = () => {
     } else {
         console.log("No audio recorded. Not uploading.");
         recordButton.disabled = false;
-        spinner.style.display = 'none';
+        listeningText.classList.add('hidden');
+        respondingText.classList.add('hidden');
     }
 };
 
@@ -117,6 +121,8 @@ if (mediaRecorder && mediaRecorder.state !== 'inactive') {
     mediaRecorder.stop();
     clearInterval(silenceDetector);
     console.log("Recording stopped");
+    listeningText.classList.add('hidden');
+    respondingText.classList.remove('hidden');
 }
 }
 
@@ -124,7 +130,8 @@ function uploadAudio(audioBlob) {
     const formData = new FormData();
     formData.append('audio', audioBlob, 'recorded_audio.webm');
 
-    spinner.style.display = 'block'; // Show spinner while processing
+    listeningText.classList.add('hidden');
+    respondingText.classList.remove('hidden');
 
     fetch('/upload_audio', {
         method: 'POST',
@@ -143,7 +150,8 @@ function uploadAudio(audioBlob) {
     .catch(error => {
         console.error('Error:', error);
         alert('There was an error processing the audio. Please try again.');
-        spinner.style.display = 'none';
+        listeningText.classList.add('hidden');
+        respondingText.classList.add('hidden');
         recordButton.disabled = false;
     });
 }
@@ -162,7 +170,8 @@ function checkProcessing() {
         .catch(error => {
             console.error('Error:', error);
             alert('There was an error checking the processing status. Please try again.');
-            spinner.style.display = 'none';
+            listeningText.classList.add('hidden');
+            respondingText.classList.add('hidden');
             recordButton.disabled = false;
         });
 }
@@ -180,17 +189,20 @@ function playProcessedAudio() {
             const audioUrl = URL.createObjectURL(blob);
             const audio = new Audio(audioUrl);
             audio.onplay = () => {
-                spinner.style.display = 'none';  // Hide spinner when response audio starts playing
+                listeningText.classList.add('hidden');
+                respondingText.classList.add('hidden');
             };
             audio.play();
             audio.onended = () => {
+                resetStatusText();
                 checkConversationComplete();
             };
         })
         .catch(error => {
             console.error('Error:', error);
             alert('There was an error playing the processed audio. Please try again.');
-            spinner.style.display = 'none';
+            listeningText.classList.add('hidden');
+            respondingText.classList.add('hidden');
             recordButton.disabled = false;
         });
 }
@@ -210,7 +222,8 @@ function checkConversationComplete() {
         .catch(error => {
             console.error('Error:', error);
             recordButton.disabled = false;
-            spinner.style.display = 'none';
+            listeningText.classList.add('hidden');
+            respondingText.classList.add('hidden');
         });
 }
 
@@ -243,12 +256,15 @@ function deleteAudioFiles() {
         .then(response => response.json())
         .then(data => {
             console.log(data.message);
-            spinner.style.display = 'none'
-            recordButton.disabled = false;
+            resetStatusText();
         })
         .catch(error => {
             console.error('Error:', error);
-            spinner.style.display = 'none';
-            recordButton.disabled = false;
+            resetStatusText();
         });
+}
+
+function resetStatusText() {
+    listeningText.classList.add('hidden');
+    respondingText.classList.add('hidden');
 }

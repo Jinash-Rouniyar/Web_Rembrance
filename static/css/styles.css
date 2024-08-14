@@ -1,15 +1,40 @@
 .spinner {
     display: none;
-    width: 25px;
-    height: 25px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.right_column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mic_button {
+    margin-bottom: 10px;
+}
+
+.status-text {
+    font-size: 14px;
+    color: #666;
+    min-height: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.dots {
+    display: inline-block;
+    width: 20px;
+}
+
+@keyframes ellipsis {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+    100% { content: ''; }
+}
+
+.dots::after {
+    content: '';
+    animation: ellipsis 1.5s infinite;
 }

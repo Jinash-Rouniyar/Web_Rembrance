@@ -46,7 +46,10 @@
             <button type="button" class="mic_button" id="recordButton">
                 <img src="{{ url_for('static', filename='images/microphone1.svg') }}" loading="lazy" alt="" class="mic_logo" />
             </button>
-            <div id="spinner" class="spinner"></div>
+            <div id="status-text" class="status-text">
+                <span id="listening" class="hidden">Listening<span class="dots">...</span></span>
+                <span id="responding" class="hidden">Responding<span class="dots">...</span></span>
+            </div>
         </aside>
     </section>
     <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
