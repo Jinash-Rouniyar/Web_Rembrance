@@ -51,6 +51,7 @@ if (isFirstRecording) {
 };
 
 async function startRecording() {
+listeningText.classList.remove('hidden');
 audioChunks = [];
 recordingStarted = false;
 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -216,6 +217,8 @@ function checkConversationComplete() {
                 fetchWebSearchResults();
             } else {
                 recordButton.disabled = false;
+                listeningText.classList.remove('hidden');
+                respondingText.classList.add('hidden');
                 startRecording();
             }
         })
