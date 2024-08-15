@@ -13,9 +13,14 @@
 }
 
 .status-text {
+    position: absolute;
+    top: calc(max(50px, 10vh) + 110px); /* 110px below the top of the mic button */
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 14px;
     color: #666;
-    min-height: 20px;
+    text-align: center;
+    width: 100%; /* Ensure it takes full width for centering */
 }
 
 .hidden {
@@ -25,6 +30,8 @@
 .dots {
     display: inline-block;
     width: 20px;
+    height: 1em;
+    margin-left: 4px;
 }
 
 @keyframes ellipsis {
