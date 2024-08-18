@@ -27,3 +27,5 @@ lxml
 lxml_html_clean
 readability
 readability-lxml
+langchain_groq
+langchain_anthropic
