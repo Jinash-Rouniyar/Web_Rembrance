@@ -2,8 +2,11 @@ import os
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import  ChatOpenAI
-from langchain_groq import ChatGroq
-from langchain_anthropic import ChatAnthropic
+try:
+    from langchain_groq import ChatGroq
+    from langchain_anthropic import ChatAnthropic
+except:
+    print("Error importing groq/anthropic")
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.prompts import (
      PromptTemplate,

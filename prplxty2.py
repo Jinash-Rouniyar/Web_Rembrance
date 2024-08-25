@@ -8,8 +8,14 @@ import ujson
 import os
 import sys
 
-# sys.path.append(r"F:\\Docker Flask\\web_rembrance\\venv\\Lib\\site-packages")
-from readability import Document
+current_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path = os.path.join(current_dir, 'venv', 'Lib', 'site-packages')
+sys.path.append(relative_path)
+
+try:
+    from readability import Document
+except:
+    print("Error importing Document from readability")
 
 COMPLETION_MODEL = "gpt-4o"
 SOURCE_COUNT = 5
