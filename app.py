@@ -10,8 +10,12 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template('home.html')
+
+@app.route('/sat-tutor')
+def sat_tutor():
+    return render_template('sat-tutor.html')
 
 @app.route('/upload_audio', methods=['POST'])
 def upload_audio():

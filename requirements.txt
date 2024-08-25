@@ -1,5 +1,6 @@
 azure.cognitiveservices.speech
 chromadb
+ujson
 grpcio
 keyboard
 openai

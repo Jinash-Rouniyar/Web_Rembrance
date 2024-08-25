@@ -50,7 +50,8 @@ def generate_audio_response(text, output_folder):
         </voice>
     </speak>
     """
-    response = requests.post(endpoint_url, headers=headers, data=ssml)
+    ssml_bytes = ssml.encode("utf-8")
+    response = requests.post(endpoint_url, headers=headers, data=ssml_bytes)
 
     if response.status_code == 200:
         output_file = os.path.join(output_folder, 'abc.wav')
@@ -61,35 +62,35 @@ def generate_audio_response(text, output_folder):
         print(f"Error: {response.status_code}, {response.text}")
         return None
 
-def categorize_question(question: str) -> Tuple[str, Optional[str]]:
-    try:
-        question_category = gpt_question_chain.invoke({"question": question}).lower()
-        print(f"Question Category: {question_category}")
+# def categorize_question(question: str) -> Tuple[str, Optional[str]]:
+#     try:
+#         question_category = gpt_question_chain.invoke({"question": question}).lower()
+#         print(f"Question Category: {question_category}")
 
-        if "standard" in question_category:
-            return question_category, None
+#         if "standard" in question_category:
+#             return question_category, None
 
-        category_chains = {
-            "craft and structure": craft_categorize_chain,
-            "information and ideas": information_categorize_chain,
-            "expression of ideas": expression_categorize_chain,
-            "standard english conventions": standard_english_chain
-        }
-        if question_category == "standard english conventions":
-            return question_category, None
-        else:
-            sub_category_chain = category_chains.get(question_category)
-            if sub_category_chain:
-                sub_category = sub_category_chain.invoke({"question": question}).lower()
-                print(f"Question Sub-Category: {sub_category}")
-                return question_category, sub_category
+#         category_chains = {
+#             "craft and structure": craft_categorize_chain,
+#             "information and ideas": information_categorize_chain,
+#             "expression of ideas": expression_categorize_chain,
+#             "standard english conventions": standard_english_chain
+#         }
+#         if question_category == "standard english conventions":
+#             return question_category, None
+#         else:
+#             sub_category_chain = category_chains.get(question_category)
+#             if sub_category_chain:
+#                 sub_category = sub_category_chain.invoke({"question": question}).lower()
+#                 print(f"Question Sub-Category: {sub_category}")
+#                 return question_category, sub_category
         
-        return question_category, None
-    except Exception as e:
-        print(f"Error in categorizing question: {e}")
-        return "Unknown", None
+#         return question_category, None
+#     except Exception as e:
+#         print(f"Error in categorizing question: {e}")
+#         return "Unknown", None
 
-def process_question(category: str, sub_category: Optional[str], chat_history: str, student_input: str, context: str, question: str, options: str, answer_exp: str) -> str:
+def process_question(sub_category: Optional[str], chat_history: str, student_input: str, context: str, question: str, options: str, answer_exp: str) -> str: #removed additional category parameter
     task_chains = {
         "vocabulary": vocab_chain,
         "purpose": purpose_chain,
@@ -105,7 +106,7 @@ def process_question(category: str, sub_category: Optional[str], chat_history: s
     }
 
     try:
-        if category == "standard english conventions":
+        if sub_category == "standard english conventions": #if category == "standard english convention"
             return standard_english_chain.invoke({
                 "context": context,
                 "question": question,
@@ -145,15 +146,6 @@ def num2words(num):
         9: "nine",
         10: "ten",
         11: "eleven",
-        12: "twelve",
-        13: "thirteen",
-        14: "fourteen",
-        15: "fifteen",
-        16: "sixteen",
-        17: "seventeen",
-        18: "eighteen",
-        19: "nineteen",
-        20: "twenty"
     }
     return numbers.get(num, str(num))
 
@@ -181,7 +173,7 @@ def perform_web_search(query):
     
     return results
 
-def process_audio(input_file, output_folder):
+def process_audio(input_file, output_folder,question_data):
     print(f"Processing audio file: {input_file}")
     
     chat_history = ""
@@ -189,7 +181,7 @@ def process_audio(input_file, output_folder):
     chat_file_path = os.path.join(output_folder, "RecordedChats.txt")
     category = None
     sub_category = None
-    context = None
+    question = None
     
     with open(chat_file_path, "w") as chat_file:
         while True:
@@ -208,8 +200,9 @@ def process_audio(input_file, output_folder):
                 chat_file.write(f"User: {user_query}\nTutor: {final_response}\n")
                 generate_audio_response(final_response,output_folder)
                 
-                if context:
-                    web_search_results = perform_web_search(context)
+                if question is not None:
+                    print(f"Web search results question: {question}")
+                    web_search_results = perform_web_search(question)
                     with open(os.path.join(output_folder,"web_search_results.txt"),"w") as f:
                         f.write(web_search_results)
                 # Signal to end the conversation
@@ -220,49 +213,17 @@ def process_audio(input_file, output_folder):
                 break
             
             if question_number is None:
-                for i in range(1, 21):
+                for i in range(11, 0, -1):
                     if str(i) in user_query or num2words(i).lower() in user_query.lower():
                         question_number = i
-                        with open("questions.txt", 'r', encoding='utf-8') as f:
-                            context = '''
-                            In 2014, accusations were made that a global
-                            mobile communications carrier had clipped
-                            their clients for millions of dollars. The
-                            company was adding one-time and recurring
-                            service fees to their monthly bills without the
-                            clients' knowledge or consent. An investigation
-                            by the U.S. Federal Trade Commission
-                            resulted in substantial refunds to over 40 percent of
-                            their clients.
-                            '''
-                            question = '''
-                            As used in the text, what does the word “clipped”
-                            most nearly mean?
-                            '''
-                            options = '''
-                            A) Cut
-                            B) Overcharged
-                            C) Busted
-                            D) Curtailed
-                            '''
-                            answer_exp = '''
-                            For this Words in Context question,
-                            use the context of the passage to determine the
-                            meaning of 'clipped' Consider the context of the word:
-                            clients were clipped for millions of dollars, and then
-                            many received refunds. Predict that the company had
-                            scammed or overcharged; this matches choice (B) and is
-                            correct.
-                            Choices(A)and (C) are both incorrect because neither
-                            'cut' nor 'busted' make sense in this context. Eliminate
-                            (D);'curtail' means to make less, which is the opposite
-                            of what occurred.
-                        '''
-                            # context = f.read().split('\n\n')[i-1] #identify every infomration like question, options,answers and everything
+                        print(f"Total questions:{len(question_data)}")
+                        question_info = question_data[i-1].strip().splitlines()
+                        context,question,options,answer_exp,sub_category = question_info[0],question_info[1],question_info[2],question_info[3],question_info[4]
+                        print(f"Question: {question}")
                         print(f"Question number {i} selected.")
                         break
             if question_number is None:
-                print("Can you specify the question number?")
+                print("Can you specify the question number between 1 to 11?")
                 new_response = "Can you specify the question number?"
                 response_file = generate_audio_response(new_response, output_folder)
                 if response_file:
@@ -280,10 +241,10 @@ def process_audio(input_file, output_folder):
                 continue
             
             #Once the question number is found, identify and categorize the question
-            if category is None: #only categorize the question once
-                category, sub_category = categorize_question(user_query)
+            # if category is None: #only categorize the question once
+            #     category, sub_category = categorize_question(user_query)
             
-            response_text = process_question(category, sub_category, chat_history, user_query, context, question, options, answer_exp)
+            response_text = process_question(sub_category, chat_history, user_query, context, question, options, answer_exp)
             
             chat_file.write(f"User: {user_query}\n")
             chat_file.write(f"Tutor: {response_text}\n")
@@ -312,6 +273,9 @@ if __name__ == "__main__":
     
     input_file = sys.argv[1]
     output_folder = sys.argv[2]
+    with open("questions.txt",encoding="utf-8") as f:
+        question_data = f.read().split("###")
+    
     
     if not os.path.exists(input_file):
         print(f"Error: File {input_file} not found")
@@ -320,4 +284,4 @@ if __name__ == "__main__":
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     
-    process_audio(input_file, output_folder)
+    process_audio(input_file, output_folder,question_data)

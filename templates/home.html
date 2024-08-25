@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rembrance Inc.</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/webflow-style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Rembrance Inc.</h1>
+        <h3>We build conversational AI tutors to make personalize learning experiences</h3>
+        <a href="{{ url_for('sat_tutor') }}" class="button">Try our SAT Tutor</a>
+    </div>
+</body>
+</html>

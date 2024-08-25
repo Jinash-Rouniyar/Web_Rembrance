@@ -232,27 +232,35 @@ function checkConversationComplete() {
 
 function fetchWebSearchResults() {
     fetch('/get_web_search_results')
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
-            if (data.results) {
-                displayWebSearchResults(data.results);
-            } else {
-                console.log("No web search results found.");
-            }
+            displayWebSearchResults(data);
             deleteAudioFiles();
         })
         .catch(error => {
             console.error('Error fetching web search results:', error);
+            displayWebSearchResults("Error fetching results.");
             deleteAudioFiles();
         });
 }
 
 function displayWebSearchResults(results) {
-    // Create a new div to display the results
-    const resultsDiv = document.createElement('div');
-    resultsDiv.innerHTML = `<h2>Web Search Results</h2><pre>${results}</pre>`;
-    document.body.appendChild(resultsDiv);
+    const additionalResourcesSection = document.getElementById('additional-resources');
+    const webSearchResultsDiv = document.getElementById('web-search-results');
+    
+    // Clear any existing content
+    webSearchResultsDiv.innerHTML = '';
+    
+    // Create a pre element for the results
+    const preElement = document.createElement('pre');
+    preElement.textContent = results;
+    
+    // Append the pre element to the results div
+    webSearchResultsDiv.appendChild(preElement);
+
+    additionalResourcesSection.classList.remove('hidden');
 }
+
 
 function deleteAudioFiles() {
     fetch('/delete_audio_files')

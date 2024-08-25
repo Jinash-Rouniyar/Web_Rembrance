@@ -8,40 +8,6 @@ from langchain.prompts import (
     ChatPromptTemplate,
 )
 
-context = '''
-In 2014, accusations were made that a global
-mobile communications carrier had clipped
-their clients for millions of dollars. The
-company was adding one-time and recurring
-service fees to their monthly bills without the
-clients' knowledge or consent. An investigation
-by the U.S. Federal Trade Commission
-resulted in substantial refunds to over 40 percent of
-their clients.
-'''
-question = '''
-As used in the text, what does the word “clipped”
-most nearly mean?
-'''
-options = '''
-A) Cut
-B) Overcharged
-C) Busted
-D) Curtailed
-'''
-answer_exp = '''
-For this Words in Context question,
-use the context of the passage to determine the
-meaning of 'clipped' Consider the context of the word:
-clients were clipped for millions of dollars, and then
-many received refunds. Predict that the company had
-scammed or overcharged; this matches choice (B) and is
-correct.
-Choices(A)and (C) are both incorrect because neither
-'cut' nor 'busted' make sense in this context. Eliminate
-(D);'curtail' means to make less, which is the opposite
-of what occurred.
-'''
 output_parser = StrOutputParser()
 #use gpt-4o-mini for a cheaper model and see if there's a difference in output
 chat_model = ChatOpenAI(model="gpt-4o", temperature=0.2) #ideal temp val = 0-0.3

@@ -8,7 +8,7 @@ import ujson
 import os
 import sys
 
-sys.path.append(r"F:\\Docker Flask\\web_rembrance\\venv\\Lib\\site-packages")
+# sys.path.append(r"F:\\Docker Flask\\web_rembrance\\venv\\Lib\\site-packages")
 from readability import Document
 
 COMPLETION_MODEL = "gpt-4o"
