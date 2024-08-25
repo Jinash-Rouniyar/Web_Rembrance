@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, send_file, jsonify
+from flask import Flask, render_template, request, send_file, jsonify, session
 import os
 import subprocess
 import time
 
 app = Flask(__name__)
+app.secret_key = 'rembrance'
 
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -16,6 +17,13 @@ def home():
 @app.route('/sat-tutor')
 def sat_tutor():
     return render_template('sat-tutor.html')
+
+@app.route('/set_language', methods=['POST'])
+def set_language():
+    data = request.json
+    selected_language = data.get('language')
+    session['language'] = selected_language
+    return jsonify({'language': selected_language})
 
 @app.route('/upload_audio', methods=['POST'])
 def upload_audio():
@@ -30,11 +38,11 @@ def upload_audio():
         filename = 'recorded_audio.webm'
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         audio_file.save(file_path)
-        
+        selected_language = session.get('language', 'english')
         # Check if main.py is already running
         if not hasattr(app, 'main_process') or app.main_process.poll() is not None:
             # Start main.py if it's not running
-            app.main_process = subprocess.Popen(['python', 'main.py', file_path, UPLOAD_FOLDER])
+            app.main_process = subprocess.Popen(['python', 'main.py', file_path, UPLOAD_FOLDER, selected_language])
         
         return jsonify({'message': 'File uploaded successfully'}), 200
 

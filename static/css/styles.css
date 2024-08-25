@@ -6,6 +6,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .mic_button {
@@ -21,6 +23,7 @@
     color: #666;
     text-align: center;
     width: 100%; /* Ensure it takes full width for centering */
+    z-index: 10; /* Add this to ensure it's above other elements */
 }
 
 .hidden {
@@ -48,19 +51,24 @@
 /* New styles for additional resources */
 #additional-resources {
     width: 100%;
-    position: relative;
-    top: 300px;
-    left: 100px;
-    padding-left: 40px;
+    position: absolute; /* Change to absolute */
+    top: calc(max(50px, 10vh) + 200px); /* Adjust this value as needed */
+    left: 0; /* Center the element */
+    right: 0; /* Center the element */
+    margin: auto; /* Center the element */
+    padding: 0 40px; /* Adjust padding */
+    z-index: 5; /* Ensure it's above the background but below the status text */
 }
 
 
 #web-search-results {
-    position: relative;
-    top: 320px;
-    left: 100px;
+    position: absolute; /* Change to absolute */
+    top: calc(max(50px, 10vh) + 250px); /* Adjust this value as needed */
+    left: 0; /* Center the element */
+    right: 0; /* Center the element */
+    margin: auto; /* Center the element */
     max-height: 300px;
     overflow-y: auto;
-    align-items: center;
     padding: 10px;
+    z-index: 5; /* Ensure it's above the background but below the status text */
 }

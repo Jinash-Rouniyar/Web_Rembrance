@@ -279,3 +279,30 @@ function resetStatusText() {
     listeningText.classList.add('hidden');
     respondingText.classList.add('hidden');
 }
+
+function setupLanguageSelection() {
+    const languageLinks = document.querySelectorAll('.language-link');
+    languageLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const selectedLang = this.getAttribute('data-lang');
+            fetch('/set_language', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({language: selectedLang}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Language set:', data.language);
+                // You can add code here to update the UI if needed
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', setupLanguageSelection);

@@ -51,11 +51,12 @@ vocab_system_template_str = """
             Options: {options}
             Answer and Explanation: {answer_exp}
             Chat History: {chat_history}
+            Language: {language}
 """
 
 vocab_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=vocab_system_template_str
     )
 )
@@ -70,7 +71,7 @@ vocab_human_prompt = HumanMessagePromptTemplate(
 vocab_messages = [vocab_system_prompt, vocab_human_prompt]
 
 vocab_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history","language","student_input"],
     messages=vocab_messages,
 )
 
@@ -82,6 +83,7 @@ vocab_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | vocab_prompt_template
@@ -129,10 +131,11 @@ purpose_system_template_str = """
                 Options: {options}
                 Answer and Explanation: {answer_exp}
                 Chat History: {chat_history}
+                Language: {language}
 """
 purpose_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=purpose_system_template_str
     )
 )
@@ -147,7 +150,7 @@ purpose_human_prompt = HumanMessagePromptTemplate(
 purpose_messages = [purpose_system_prompt, purpose_human_prompt]
 
 purpose_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history","language", "student_input"],
     messages=purpose_messages,
 )
 
@@ -158,6 +161,7 @@ purpose_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | purpose_prompt_template
@@ -204,11 +208,12 @@ connection_system_template_str = """
                     Options: {options}
                     Answer and Explanation: {answer_exp}
                     Chat History: {chat_history}
+                    Language: {language}
 """
 
 connection_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=connection_system_template_str
     )
 )
@@ -223,7 +228,7 @@ connection_human_prompt = HumanMessagePromptTemplate(
 connection_messages = [connection_system_prompt, connection_human_prompt]
 
 connection_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history","language","student_input"],
     messages=connection_messages,
 )
 
@@ -234,6 +239,7 @@ connection_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | connection_prompt_template
@@ -284,7 +290,7 @@ main_idea_system_template_str = """
 
 main_idea_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=main_idea_system_template_str
     )
 )
@@ -299,7 +305,7 @@ main_idea_human_prompt = HumanMessagePromptTemplate(
 main_idea_messages = [main_idea_system_prompt, main_idea_human_prompt]
 
 main_idea_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history","language", "student_input"],
     messages=main_idea_messages,
 )
 
@@ -310,6 +316,7 @@ main_idea_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | main_idea_prompt_template
@@ -361,7 +368,7 @@ Chat History: {chat_history}
 
 detail_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=detail_system_template_str
     )
 )
@@ -376,7 +383,7 @@ detail_human_prompt = HumanMessagePromptTemplate(
 detail_messages = [detail_system_prompt, detail_human_prompt]
 
 detail_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history", "language","student_input"],
     messages=detail_messages,
 )
 
@@ -387,6 +394,7 @@ detail_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | detail_prompt_template
@@ -436,7 +444,7 @@ Chat History: {chat_history}
 
 textual_evidence_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=textual_evidence_system_template_str
     )
 )
@@ -451,7 +459,7 @@ textual_evidence_human_prompt = HumanMessagePromptTemplate(
 textual_evidence_messages = [textual_evidence_system_prompt, textual_evidence_human_prompt]
 
 textual_evidence_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history","language", "student_input"],
     messages=textual_evidence_messages,
 )
 
@@ -462,6 +470,7 @@ textual_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | textual_evidence_prompt_template
@@ -511,7 +520,7 @@ Chat History: {chat_history}
 
 quantitative_evidence_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=quantitative_evidence_system_template_str
     )
 )
@@ -526,7 +535,7 @@ quantitative_evidence_human_prompt = HumanMessagePromptTemplate(
 quantitative_evidence_messages = [quantitative_evidence_system_prompt, quantitative_evidence_human_prompt]
 
 quantitative_evidence_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history", "language","student_input"],
     messages=quantitative_evidence_messages,
 )
 
@@ -537,6 +546,7 @@ quantitative_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | quantitative_evidence_prompt_template
@@ -580,7 +590,7 @@ Chat History: {chat_history}
 
 inference_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=inference_system_template_str
     )
 )
@@ -595,7 +605,7 @@ inference_human_prompt = HumanMessagePromptTemplate(
 inference_messages = [inference_system_prompt, inference_human_prompt]
 
 inference_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history", "language","student_input"],
     messages=inference_messages,
 )
 
@@ -606,6 +616,7 @@ inference_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | inference_prompt_template
@@ -655,7 +666,7 @@ Chat History: {chat_history}
 
 synthesis_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=synthesis_system_template_str
     )
 )
@@ -670,7 +681,7 @@ synthesis_human_prompt = HumanMessagePromptTemplate(
 synthesis_messages = [synthesis_system_prompt, synthesis_human_prompt]
 
 synthesis_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history", "language","student_input"],
     messages=synthesis_messages,
 )
 
@@ -681,6 +692,7 @@ synthesis_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | synthesis_prompt_template
@@ -735,7 +747,7 @@ Chat History: {chat_history}
 
 transition_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=transition_system_template_str
     )
 )
@@ -750,7 +762,7 @@ transition_human_prompt = HumanMessagePromptTemplate(
 transition_messages = [transition_system_prompt, transition_human_prompt]
 
 transition_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history", "language","student_input"],
     messages=transition_messages,
 )
 
@@ -761,6 +773,7 @@ transition_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | transition_prompt_template
@@ -804,7 +817,7 @@ Chat History: {chat_history}
 
 standard_english_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(
-        input_variables=["context", "question", "options", "answer_exp", "chat_history"],
+        input_variables=["context", "question", "options", "answer_exp", "chat_history","language"],
         template=standard_english_system_template_str
     )
 )
@@ -819,7 +832,7 @@ standard_english_human_prompt = HumanMessagePromptTemplate(
 standard_english_messages = [standard_english_system_prompt, standard_english_human_prompt]
 
 standard_english_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question", "options", "answer_exp", "chat_history", "student_input"],
+    input_variables=["context", "question", "options", "answer_exp", "chat_history","language", "student_input"],
     messages=standard_english_messages,
 )
 
@@ -831,6 +844,7 @@ standard_english_chain = (
         "options": RunnablePassthrough(),
         "answer_exp": RunnablePassthrough(),
         "chat_history": RunnablePassthrough(),
+        "language":RunnablePassthrough(),
         "student_input": RunnablePassthrough()
     }
     | standard_english_prompt_template
@@ -844,7 +858,7 @@ standard_english_chain = (
     #     user_input = input("Enter your response:")
     #     if "quit" in user_input.lower():
     #         break
-    #     output = vocab_chain.invoke({"context":context, "question":question,"options":options,"answer_exp":answer_exp,"chat_history":chat_history,"student_input":user_input})
+    #     output = vocab_chain.invoke({"context":context, "question":question,"options":options,"answer_exp":answer_exp,"chat_history":chat_history,"language":language,"student_input":user_input})
     #     chat_history += f"Student: {user_input}\n"
     #     chat_history += f"Tutor: {output}\n"
     #     print(output)
