@@ -231,6 +231,7 @@ def process_audio(input_file, output_folder,question_data,language):
             audio.export(wav_file, format="wav")
             
             user_query = stt.speechtotext_from_file(wav_file)
+            # user_query = stt.speechtotext_from_mic()
             if any(word in user_query.lower() for word in ["bye", "thank", "goodbye","adios","au revoir","अलविदा","Ciao"]):
                 if language == "spanish":
                     final_response = "Contenta de ayudar"
